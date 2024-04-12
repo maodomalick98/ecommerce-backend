@@ -1,5 +1,6 @@
 package com.malick.ecommerce.entity;
 
+import com.malick.ecommerce.entity.Product;
 import jakarta.persistence.*;
 import lombok.Data;
 
