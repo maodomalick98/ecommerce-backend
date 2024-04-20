@@ -7,6 +7,7 @@ import com.malick.ecommerce.entity.State;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.EntityType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.mapping.ExposureConfigurer;
@@ -22,6 +23,10 @@ import java.util.Set;
 public class SpringDataRestConfig implements RepositoryRestConfigurer {
 
     private final EntityManager entityManager;
+
+    @Value("${origin-domain-allowed}")
+    private String[] originDomainAllowed;
+
     @Autowired
     public SpringDataRestConfig(EntityManager entityManager) {
         this.entityManager = entityManager;
@@ -29,7 +34,7 @@ public class SpringDataRestConfig implements RepositoryRestConfigurer {
 
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        HttpMethod[] disabledMethods = {HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.POST, HttpMethod.DELETE};
+        HttpMethod[] disabledMethods = {HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH};
 
         disableHttpMethods(config.getExposureConfiguration()
                 .forDomainType(Product.class), disabledMethods);
@@ -44,6 +49,8 @@ public class SpringDataRestConfig implements RepositoryRestConfigurer {
                 .forDomainType(State.class), disabledMethods);
 
         exposeEntityIds(config);
+
+        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(this.originDomainAllowed);
     }
 
     private void exposeEntityIds(RepositoryRestConfiguration config) {
