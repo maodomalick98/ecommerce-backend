@@ -1,9 +1,6 @@
 package com.malick.ecommerce.config;
 
-import com.malick.ecommerce.entity.Country;
-import com.malick.ecommerce.entity.Product;
-import com.malick.ecommerce.entity.ProductCategory;
-import com.malick.ecommerce.entity.State;
+import com.malick.ecommerce.entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.EntityType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +44,9 @@ public class SpringDataRestConfig implements RepositoryRestConfigurer {
 
         disableHttpMethods(config.getExposureConfiguration()
                 .forDomainType(State.class), disabledMethods);
+
+        disableHttpMethods(config.getExposureConfiguration()
+                .forDomainType(Order.class), disabledMethods);
 
         exposeEntityIds(config);
 
