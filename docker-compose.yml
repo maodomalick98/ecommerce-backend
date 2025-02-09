@@ -1,0 +1,25 @@
+version: '3.0'
+
+services:
+  e-commerce-backend:
+   build: .
+   ports: 
+    - "99:8080"
+   depends_on:
+    - mysql-db
+  mysql-db:
+   image: mysql
+   restart: always
+   environment:
+    MYSQL_USER: user
+    MYSQL_PASSWORD: 'root'
+    MYSQL_ROOT_PASSWORD: 'root'
+    MYSQL_DATABASE: ecommerce 
+   ports:
+      - "3307:3306"
+   volumes:
+       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+       -  db_data:/var/lib/mysql
+volumes:
+  db_data:
+   driver: local  
